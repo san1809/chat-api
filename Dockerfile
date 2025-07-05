@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.21-alpine
+FROM golang:1.24-alpine
 
 # Install Git (needed for go mod)
 RUN apk add --no-cache git
