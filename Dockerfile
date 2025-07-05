@@ -1,26 +1,19 @@
-# syntax=docker/dockerfile:1
-
+# Build stage
 FROM golang:1.24-alpine
 
-# Install Git (needed for go mod)
-RUN apk add --no-cache git
-
-# Set working directory
 WORKDIR /app
 
-# Copy go.mod and go.sum
+# Copy go.mod and go.sum first for better caching
 COPY go.mod ./
 COPY go.sum ./
+
+# Tidy modules before downloading
+RUN go mod tidy
 RUN go mod download
 
-# Copy the rest of the code
+# Now copy the rest of the app
 COPY . .
 
-# Build the app
+# Build the binary
 RUN go build -o server .
 
-# Expose port 8080 (your Go app port)
-EXPOSE 8080
-
-# Run the app
-CMD ["./server"]
