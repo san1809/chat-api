@@ -1,19 +1,19 @@
-# Build stage
 FROM golang:1.24-alpine
 
 WORKDIR /app
 
-# Copy go.mod and go.sum first for better caching
+# Copy go.mod and go.sum first for caching
 COPY go.mod ./
 COPY go.sum ./
 
-# Tidy modules before downloading
+# Then copy source code (needed before tidy!)
+COPY . .
+
+# Tidy and download dependencies
 RUN go mod tidy
 RUN go mod download
 
-# Now copy the rest of the app
-COPY . .
-
-# Build the binary
+# Build the app
 RUN go build -o server .
+
 
