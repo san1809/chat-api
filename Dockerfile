@@ -13,6 +13,8 @@ COPY . .
 RUN go mod tidy
 RUN go mod download
 
+EXPOSE 3000
+
 # Build the app
 RUN go build -o server .
 
